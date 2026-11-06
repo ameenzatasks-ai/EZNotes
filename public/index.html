@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>2ndBrain AI — Turn any video into knowledge</title>
+    <link rel="icon" type="image/svg+xml" href="/logo.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <meta
+      name="description"
+      content="Paste a YouTube or Facebook video link. 2ndBrain AI categorizes it and writes a clean summary you can export to Word."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap"
+      rel="stylesheet"
+      media="print"
+      onload="this.media='all'"
+    />
+    <noscript>
+      <link
+        href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap"
+        rel="stylesheet"
+      />
+    </noscript>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <!-- NAV -->
+    <header class="nav">
+      <div class="nav__inner">
+        <a class="brand" href="/">
+          <img class="brand__logo" src="/logo.svg" alt="" width="30" height="30" />
+          <span class="brand__name">2ndBrain<span class="brand__ai">AI</span></span>
+        </a>
+        <nav class="nav__links">
+          <a href="#how" class="nav__link">How it works</a>
+          <a href="#app" class="nav__btn">Get started</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <!-- HERO -->
+      <section class="hero">
+        <p class="eyebrow">Your second brain</p>
+        <h1 class="hero__title">
+          Turn any video into
+          <span class="chip-lime">knowledge</span>
+        </h1>
+        <p class="hero__sub">
+          Paste a YouTube or Facebook link. 2ndBrain AI reads the transcript,
+          sorts it into the right bucket, saves a clean Google Doc, and sends it
+          to your Telegram — in seconds.
+        </p>
+
+        <!-- INPUT CARD -->
+        <section id="app" class="panel" aria-label="Analyze a video">
+          <form id="analyze-form" class="form" novalidate>
+            <label class="form__label" for="video-url">Video link</label>
+            <div class="form__row">
+              <input
+                id="video-url"
+                name="url"
+                type="url"
+                class="input"
+                inputmode="url"
+                autocomplete="off"
+                placeholder="https://www.youtube.com/watch?v=…"
+                aria-describedby="form-help"
+              />
+              <button type="submit" class="btn btn--inverted" id="analyze-btn">
+                Analyze video
+              </button>
+            </div>
+            <p id="form-help" class="form__help">
+              Works with YouTube and public Facebook videos. Tip: videos with
+              captions give the best summaries.
+            </p>
+            <div class="hints">
+              <span class="hint">▶ YouTube</span>
+              <span class="hint">f Facebook</span>
+            </div>
+          </form>
+        </section>
+
+        <!-- LOADING -->
+        <section id="loading" class="state state--loading" hidden aria-live="polite">
+          <span class="spinner" aria-hidden="true"></span>
+          <p class="state__text" id="loading-text">Fetching the transcript…</p>
+        </section>
+
+        <!-- ERROR -->
+        <section
+          id="error"
+          class="state state--error"
+          hidden
+          role="alert"
+          aria-live="assertive"
+        >
+          <span class="state__icon" aria-hidden="true">!</span>
+          <div>
+            <p class="state__title">Couldn't read that video</p>
+            <p class="state__text" id="error-text"></p>
+          </div>
+          <button type="button" class="btn btn--ghost" id="error-retry">
+            Try again
+          </button>
+        </section>
+
+        <!-- RESULT -->
+        <section id="result" class="result" hidden aria-live="polite">
+          <div class="result__head">
+            <div>
+              <span class="result__eyebrow" id="result-source">From transcript</span>
+              <h2 class="result__title" id="result-title">Video summary</h2>
+            </div>
+            <span class="category" id="result-category">Interesting Stuff</span>
+          </div>
+
+          <div class="result__block">
+            <h3 class="result__h3">Summary</h3>
+            <p class="result__overview" id="result-overview"></p>
+          </div>
+
+          <div class="result__block" id="takeaways-block">
+            <h3 class="result__h3">Key takeaways</h3>
+            <ul class="bullets" id="result-takeaways"></ul>
+          </div>
+
+          <div class="result__block" id="actions-block" hidden>
+            <h3 class="result__h3">Actionable steps</h3>
+            <ul class="bullets bullets--lime" id="result-actions"></ul>
+          </div>
+
+          <div class="result__foot">
+            <button type="button" class="btn btn--inverted" id="publish-btn">
+              <span aria-hidden="true">⬉</span> Save to Google Docs &amp; send to Telegram
+            </button>
+            <button type="button" class="btn btn--ghost" id="reset-btn">
+              Analyze another
+            </button>
+          </div>
+          <div class="publish-status" id="publish-status" role="status" hidden></div>
+        </section>
+      </section>
+
+      <!-- HOW IT WORKS -->
+      <section id="how" class="how">
+        <p class="eyebrow eyebrow--center">How it works</p>
+        <div class="steps">
+          <article class="step">
+            <span class="step__num">01</span>
+            <h3 class="step__title">Paste a link</h3>
+            <p class="step__text">
+              Drop in any YouTube or public Facebook video URL.
+            </p>
+          </article>
+          <article class="step">
+            <span class="step__num">02</span>
+            <h3 class="step__title">AI reads it</h3>
+            <p class="step__text">
+              We pull the transcript and Gemini categorizes and summarizes it.
+            </p>
+          </article>
+          <article class="step">
+            <span class="step__num">03</span>
+            <h3 class="step__title">Docs + Telegram</h3>
+            <p class="step__text">
+              One click saves a clean Google Doc and sends it straight to your
+              Telegram.
+            </p>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+      <svg class="squiggle" viewBox="0 0 1200 20" preserveAspectRatio="none" aria-hidden="true">
+        <path
+          d="M0,10 Q30,0 60,10 T120,10 T180,10 T240,10 T300,10 T360,10 T420,10 T480,10 T540,10 T600,10 T660,10 T720,10 T780,10 T840,10 T900,10 T960,10 T1020,10 T1080,10 T1140,10 T1200,10"
+          fill="none"
+          stroke="#c2ef4e"
+          stroke-width="3"
+        />
+      </svg>
+      <div class="footer__inner">
+        <span class="brand__name">2ndBrain<span class="brand__ai">AI</span></span>
+        <p class="footer__note">Your personal knowledge engine. Built for fast learners.</p>
+      </div>
+    </footer>
+
+    <script src="/app.js"></script>
+  </body>
+</html>

@@ -1,0 +1,34 @@
+# Render "Blueprint" — tells Render how to run EZnotes.
+# Render → New → Blueprint → pick this repo. It will ask you for the values
+# marked `sync: false` (your secrets); they are stored on Render, never in Git.
+services:
+  - type: web
+    name: eznotes
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /healthz
+    envVars:
+      - key: NODE_VERSION
+        value: "20"
+      - key: GEMINI_MODEL
+        value: gemini-2.5-flash
+      - key: BOT_PUBLIC
+        value: "true"
+      # Secrets — Render asks for these when you create the Blueprint.
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: TELEGRAM_BOT_TOKEN
+        sync: false
+      - key: TELEGRAM_CHAT_ID
+        sync: false
+      - key: GOOGLE_DOC_ID
+        sync: false
+      # Paste the WHOLE contents of service-account.json here.
+      - key: GOOGLE_SERVICE_ACCOUNT_JSON
+        sync: false
+      # Password for the web page (any username). Render generates one; find it
+      # under Environment if you want to use the website.
+      - key: WEB_UI_PASSWORD
+        generateValue: true
